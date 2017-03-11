@@ -1,4 +1,6 @@
-import React, { PropTypes, Component } from 'react'
+// @flow
+
+import React, { Component } from 'react'
 import {
   View,
   ScrollView,
@@ -16,27 +18,33 @@ import LoginActions from '../Reducers/LoginRedux'
 import { NavigationActions } from '@expo/ex-navigation'
 // import { Actions as NavigationActions } from 'react-native-router-flux'
 
+type Props = {
+  dispatch: () => void,
+  fetching: boolean,
+  attemptLogin: (username: string, password: string) => void,
+  username: string
+}
+
+type PropsState = {
+  username: string,
+  password: string,
+  visibleHeight: number,
+  topLogo: any
+}
+
 class LoginContainer extends Component {
+  props: Props
 
-  static propTypes = {
-    dispatch: PropTypes.func,
-    fetching: PropTypes.bool,
-    attemptLogin: PropTypes.func
-  }
-
-  isAttempting = false
+  isAttempting: boolean = false
   keyboardDidShowListener = {}
   keyboardDidHideListener = {}
+  isAttempting = false
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      username: 'reactnative@infinite.red',
-      password: 'password',
-      visibleHeight: Metrics.screenHeight,
-      topLogo: { width: Metrics.screenWidth }
-    }
-    this.isAttempting = false
+  state: PropsState = {
+    username: 'reactnative@infinite.red',
+    password: 'password',
+    visibleHeight: Metrics.screenHeight,
+    topLogo: { width: Metrics.screenWidth }
   }
 
   componentWillReceiveProps (newProps) {
@@ -98,12 +106,16 @@ class LoginContainer extends Component {
     const { fetching } = this.props
     const editable = !fetching
     const textInputStyle = editable ? Styles.textInput : Styles.textInputReadonly
+
     return (
       <ScrollView contentContainerStyle={{justifyContent: 'center'}} style={[Styles.container, {height: this.state.visibleHeight}]} keyboardShouldPersistTaps='always'>
         <Image source={Images.logo} style={[Styles.topLogo, this.state.topLogo]} />
         <View style={Styles.form}>
           <View style={Styles.row}>
-            <Text style={Styles.rowLabel}>Username {this.props.username ? `Loggued as : ${this.props.username}` : ''}</Text>
+            <Text style={Styles.rowLabel}>
+              Username {this.props.username ? `Loggued as : ${this.props.username}` : ''}
+            </Text>
+
             <TextInput
               ref='username'
               style={textInputStyle}
@@ -154,20 +166,15 @@ class LoginContainer extends Component {
       </ScrollView>
     )
   }
-
 }
 
-const mapStateToProps = (state) => {
-  return {
-    fetching: state.login.fetching,
-    username: state.login.username
-  }
-}
+const mapStateToProps = (state) => ({
+  fetching: state.login.fetching,
+  username: state.login.username
+})
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password))
-  }
-}
+const mapDispatchToProps = (dispatch) => ({
+  attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer)

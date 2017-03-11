@@ -10,13 +10,15 @@
     "@expo/vector-icons": "~4.0.0",
     "apisauce": "^0.10.0",
     "expo": "^14.0.2",
-    "react": "~15.4.0",
+    "flow-bin": "^0.41.0",
+    "react": "~15.4.2",
     "react-native": "https://github.com/exponent/react-native/archive/sdk-14.0.0.tar.gz",
     "react-redux": "^5.0.3",
     "redux-persist": "^4.4.2",
     "redux-saga": "^0.14.3",
     "reduxsauce": "^0.4.1",
-    "seamless-immutable": "^7.0.1"
+    "seamless-immutable": "^7.0.1",
+    "standard-flow": "^1.0.0"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -33,7 +35,8 @@
   },
   "scripts": {
     "lint": "standard --verbose | snazzy",
-    "fixcode": "standard --fix"
+    "fixcode": "standard --fix",
+    "flow": "flow --show-all-errors"
   },
   "config": {
     "ghooks": {
